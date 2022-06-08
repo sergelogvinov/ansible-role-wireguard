@@ -1,0 +1,32 @@
+---
+
+- include_tasks: install.yml
+
+- include_tasks: install_backports.yml
+  when: ansible_distribution_release == "buster"
+
+- name: Setup interface and peers
+  become: yes
+  template:
+    src: interface.conf.j2
+    dest: "/etc/wireguard/{{ wireguard_interface }}.conf"
+    owner: root
+    group: root
+    mode: 0600
+  when: wireguard_private_key != "" and (wireguard_peers | length > 0)
+  notify: restart wireguard
+
+- name: Enable and start WireGuard service
+  become: yes
+  service:
+    name: "wg-quick@{{ wireguard_interface }}"
+    state: started
+    enabled: true
+  when: wireguard_private_key != "" and wireguard_peers and (wireguard_peers | length > 0)
+
+- name: Generate client configs
+  become: yes
+  template: src=client.conf.j2 dest=/etc/wireguard/{{ item.pub | checksum }}.client
+    mode=0600
+  when: item.key is defined
+  with_items: "{{ wireguard_peers }}"

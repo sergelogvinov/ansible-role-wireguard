@@ -1,0 +1,13 @@
+---
+
+- name: Install WireGuard (Debian)
+  become: yes
+  apt:
+    name: wireguard
+  when: ansible_distribution_release == "bullseye"
+
+- name: Install WireGuard (RedHat)
+  become: yes
+  yum:
+    name: ['kmod-wireguard','wireguard-tools']
+  when: ansible_os_family == "RedHat"

@@ -1,0 +1,23 @@
+---
+
+- name: Add backports repository (Debian)
+  become: yes
+  copy:
+    content: "deb http://deb.debian.org/debian buster-backports main\n"
+    dest: /etc/apt/sources.list.d/backports.list
+  when: ansible_distribution == 'Debian'
+  notify: backports-apt-get-update
+
+- meta: flush_handlers
+
+- name: Install Linux kernel headers
+  become: yes
+  apt:
+    name: linux-headers-amd64
+  when: ansible_distribution == 'Debian'
+
+- name: Install WireGuard (Debian)
+  become: yes
+  apt:
+    name: wireguard
+  when: ansible_distribution == 'Debian'

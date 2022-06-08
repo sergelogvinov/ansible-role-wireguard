@@ -1,0 +1,22 @@
+[Interface]
+{% if wireguard_interface_network %}
+Address = {{ wireguard_interface_network }}
+{% endif %}
+PrivateKey = {{ wireguard_private_key }}
+ListenPort = {{ wireguard_listen_port }}
+MTU = {{ wireguard_interface_mtu }}
+{% if wireguard_interface_route %}
+Table = off
+{% for route in wireguard_interface_route %}
+PostUp = ip ro add {{ route }} src {{ wireguard_interface_address }} dev {{ wireguard_interface }} mtu 1400
+{% endfor %}
+{% endif %}
+
+{% for host in wireguard_peers %}
+[Peer]
+{% if host.ep is defined %}
+Endpoint = {{ host.ep }}:{{ wireguard_listen_port }}
+{% endif %}
+PublicKey = {{ host.pub }}
+AllowedIps = {{ host.ips }}
+{% endfor %}
