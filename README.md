@@ -1,4 +1,4 @@
-# ansible-role-wireguard
+# Ansible role wireguard
 
 Easy way to configure wireguard peers
 
