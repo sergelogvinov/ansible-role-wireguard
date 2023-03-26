@@ -1,10 +1,10 @@
 
 wireguard_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-wireguard_listen_port: 1191
+wireguard_listen_port: 51820
 wireguard_interface: wg0
 wireguard_interface_mtu: 1420
-wireguard_interface_address: 192.168.1.1
-wireguard_interface_network: "{{ wireguard_interface_address}}/24"
+wireguard_interface_address: "{{ 'fd50:beef:1:2::' | ansible.utils.slaac(ansible_default_ipv4['macaddress']) }}"
+wireguard_interface_network: "{{ wireguard_interface_address }}/64"
 wireguard_interface_route: ~
   # - 172.18.0.0/24
   # - 172.18.1.0/24

@@ -13,7 +13,7 @@
     owner: root
     group: root
     mode: 0600
-  when: wireguard_private_key != "" and (wireguard_peers | length > 0)
+  when: wireguard_private_key != "" and wireguard_peers and (wireguard_peers | length > 0)
   notify: restart wireguard
 
 - name: Enable and start WireGuard service
