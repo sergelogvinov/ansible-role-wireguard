@@ -15,8 +15,8 @@ PostUp = ip ro add {{ route }} src {{ wireguard_interface_address }} dev {{ wire
 {% for host in wireguard_peers %}
 [Peer]
 {% if host.ep is defined %}
-Endpoint = {{ host.ep }}:{{ wireguard_listen_port }}
+Endpoint = {{ host.ep }}:{{ host.port | default(wireguard_listen_port) }}
 {% endif %}
-PublicKey = {{ host.pub }}
+PublicKey = {{ host.pub | trim }}
 AllowedIps = {{ host.ips | split(',') | difference(wireguard_route_exclude) | join(',') }}
 {% endfor %}

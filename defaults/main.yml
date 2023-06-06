@@ -15,6 +15,6 @@ wireguard_public_key: ~
 
 # wg genkey | tee client.key | wg pubkey > client.pub
 wireguard_peers: []
-  # - { ep: "8.8.8.8",  ips: "192.168.0.0/24", pub: "AAA" }
+  # - { ep: "8.8.8.8", ips: "192.168.0.0/24", pub: "AAA" }
 
 wireguard_route_exclude: ""
