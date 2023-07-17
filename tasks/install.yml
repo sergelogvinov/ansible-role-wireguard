@@ -4,7 +4,7 @@
   become: yes
   apt:
     name: wireguard
-  when: ansible_distribution_release == "bullseye"
+  when: ansible_distribution_release == "bullseye" or ansible_distribution_release == "bookworm"
 
 - name: Install WireGuard (RedHat)
   become: yes
