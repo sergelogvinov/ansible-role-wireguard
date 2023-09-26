@@ -14,7 +14,7 @@ PostUp = ip ro add {{ route }} src {{ wireguard_interface_address }} dev {{ wire
 
 {% for host in wireguard_peers %}
 [Peer]
-{% if host.ep is defined %}
+{% if (host.ep is defined) and (host.ep != "") %}
 Endpoint = {{ host.ep }}:{{ host.port | default(wireguard_listen_port) }}
 {% endif %}
 PublicKey = {{ host.pub | trim }}
