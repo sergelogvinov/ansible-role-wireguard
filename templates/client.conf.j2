@@ -4,7 +4,14 @@ PrivateKey = {{ item.key }}
 DNS = {{ wireguard_interface_address }}
 
 [Peer]
-PublicKey = {{ wireguard_public_key }}
-AllowedIps = {{ wireguard_interface_network }}
 Endpoint = {{ wireguard_address }}:{{ wireguard_listen_port }}
-PersistentKeepalive = 25
+PublicKey = {{ wireguard_public_key | trim }}
+AllowedIps = {{ wireguard_subnets | split(',') | difference(wireguard_route_exclude) | join(',') }}
+{% for host in wireguard_peers %}{% if (host.pub is defined) and (host.pub != "") and (host.ep is defined) and (host.ep != "") %}
+{% set ep = host.ep | trim %}{% if ep != "None" %}
+[Peer]
+Endpoint = {{ ep }}:{{ host.port | default(wireguard_listen_port) }}
+PublicKey = {{ host.pub | trim }}
+AllowedIps = {{ host.ips | split(',') | difference(wireguard_route_exclude) | join(',') }}
+{% endif %}{% endif %}
+{% endfor %}
