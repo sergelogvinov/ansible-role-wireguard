@@ -20,6 +20,6 @@ Endpoint = {{ ep }}:{{ host.port | default(wireguard_listen_port) }}
 {% endif %}{% endif %}
 {% if (host.pub is defined) and (host.pub != "") %}
 PublicKey = {{ host.pub | trim }}
-AllowedIps = {{ host.ips | split(',') | difference(wireguard_route_exclude) | join(',') }}
+AllowedIps = {{ host.ips | split(',') | difference(wireguard_route_exclude) | sort | join(',') }}
 {% endif %}
 {% endfor %}
