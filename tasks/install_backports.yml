@@ -7,17 +7,21 @@
     dest: /etc/apt/sources.list.d/backports.list
   when: ansible_distribution == 'Debian'
   notify: backports-apt-get-update
+  tags: [wireguard]
 
 - meta: flush_handlers
+  tags: [wireguard]
 
 - name: Install Linux kernel headers
   become: yes
   apt:
     name: linux-headers-amd64
   when: ansible_distribution == 'Debian'
+  tags: [wireguard]
 
 - name: Install WireGuard (Debian)
   become: yes
   apt:
     name: wireguard
   when: ansible_distribution == 'Debian'
+  tags: [wireguard]

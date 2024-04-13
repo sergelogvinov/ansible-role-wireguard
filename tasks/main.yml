@@ -1,9 +1,11 @@
 ---
 
 - include_tasks: install.yml
+  tags: [wireguard]
 
 - include_tasks: install_backports.yml
   when: ansible_distribution_release == "buster"
+  tags: [wireguard]
 
 - name: Setup interface and peers
   become: yes
@@ -15,6 +17,7 @@
     mode: 0600
   when: wireguard_private_key != "" and wireguard_peers and (wireguard_peers | length > 0)
   notify: restart wireguard
+  tags: [wireguard]
 
 - name: Enable and start WireGuard service
   become: yes
@@ -23,6 +26,7 @@
     state: started
     enabled: true
   when: wireguard_private_key != "" and wireguard_peers and (wireguard_peers | length > 0)
+  tags: [wireguard]
 
 - name: Generate client configs
   become: yes
@@ -30,3 +34,4 @@
     mode=0600
   when: item.key is defined
   with_items: "{{ wireguard_peers }}"
+  tags: [wireguard]
