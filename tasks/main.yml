@@ -4,11 +4,11 @@
   tags: [wireguard]
 
 - include_tasks: install_backports.yml
-  when: ansible_distribution_release == "buster"
+  when: ansible_facts["distribution_release"] == "buster"
   tags: [wireguard]
 
 - name: Setup interface and peers
-  become: yes
+  become: true
   template:
     src: interface.conf.j2
     dest: "/etc/wireguard/{{ wireguard_interface }}.conf"
@@ -20,7 +20,7 @@
   tags: [wireguard]
 
 - name: Enable and start WireGuard service
-  become: yes
+  become: true
   service:
     name: "wg-quick@{{ wireguard_interface }}"
     state: started
@@ -29,7 +29,7 @@
   tags: [wireguard]
 
 - name: Generate client configs
-  become: yes
+  become: true
   template: src=client.conf.j2 dest=/etc/wireguard/{{ item.pub | checksum }}.client
     mode=0600
   when: item.key is defined

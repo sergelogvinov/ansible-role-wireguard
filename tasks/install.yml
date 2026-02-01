@@ -2,16 +2,16 @@
 
 - name: Install WireGuard (Debian)
   check_mode: no
-  become: yes
+  become: true
   apt:
     name: wireguard
-  when: ansible_distribution_release == "bullseye" or ansible_distribution_release == "bookworm" or ansible_distribution_release == "focal"
+  when: ansible_facts["distribution_release"] == "bullseye" or ansible_facts["distribution_release"] == "bookworm" or ansible_facts["distribution_release"] == "focal"
   tags: [wireguard]
 
 - name: Install WireGuard (RedHat)
   check_mode: no
-  become: yes
+  become: true
   yum:
     name: ['kmod-wireguard','wireguard-tools']
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts["os_family"] == "RedHat"
   tags: [wireguard]
