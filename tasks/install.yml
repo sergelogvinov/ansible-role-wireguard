@@ -1,11 +1,17 @@
 ---
 
+- include_vars: "{{ item }}"
+  with_first_found:
+    - "../vars/{{ ansible_facts['distribution_release'] }}.yml"
+    - "../vars/empty.yml"
+  tags: [wireguard]
+
 - name: Install WireGuard (Debian)
   check_mode: no
   become: true
   apt:
-    name: wireguard
-  when: ansible_facts["distribution_release"] == "bullseye" or ansible_facts["distribution_release"] == "bookworm" or ansible_facts["distribution_release"] == "focal"
+    name: "{{ wireguard_package }}"
+  when: wireguard_package != ""
   tags: [wireguard]
 
 - name: Install WireGuard (RedHat)
