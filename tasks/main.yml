@@ -15,7 +15,7 @@
     owner: root
     group: root
     mode: 0600
-  when: wireguard_private_key != "" and wireguard_peers and (wireguard_peers | length > 0)
+  when: wireguard_private_key != "" and (wireguard_peers | length > 0)
   notify: restart wireguard
   tags: [wireguard]
 
@@ -25,7 +25,7 @@
     name: "wg-quick@{{ wireguard_interface }}"
     state: started
     enabled: true
-  when: wireguard_private_key != "" and wireguard_peers and (wireguard_peers | length > 0)
+  when: wireguard_private_key != "" and (wireguard_peers | length > 0)
   tags: [wireguard]
 
 - name: Generate client configs
